@@ -1,16 +1,30 @@
 'use strict';
 
 (function (CKEDITOR) {
-    function intersect(haystack, needle) {
-        var filter = function (item) {
-            return haystack.indexOf(item) >= 0;
-        };
+    var mediaClass = ['audio', 'iframe', 'image', 'video'];
 
-        return Array.isArray(haystack) && Array.isArray(needle) && needle.filter(filter).length > 0;
+    function one(el, haystack) {
+        if (!el || !Array.isArray(haystack)) {
+            return null;
+        }
+
+        var result = null;
+
+        for (var i = 0; i < haystack.length; i++) {
+            if (el.hasClass(haystack[i])) {
+                if (result) {
+                    return null;
+                }
+
+                result = haystack[i];
+            }
+        }
+
+        return result;
     }
 
     function isMedia(el) {
-        return !!el && el.name === 'figure' && intersect(el.attributes.class, ['audio', 'iframe', 'image', 'video']);
+        return el && el.name === 'figure' ? one(el, mediaClass) : null;
     }
 
     function isContent(el) {
@@ -40,7 +54,7 @@
                     },
                     media: {
                         selector: '.media',
-                        allowedContent: 'figure(audio, iframe, image, video)',
+                        allowedContent: 'figure(audio, iframe, image, video); a[!href]; audio[!src, controls]; iframe[!src, width, height, allowfullscreen]; img[!src, width, height, alt]; video[!src, width, height, controls]; figcaption',
                         requiredContent: 'figure'
                     },
                     content: {
@@ -49,9 +63,11 @@
                 },
                 allowedContent: 'section(*); h2; div(!media); div(!content)',
                 requiredContent: 'section; h2; div(media); div(content)',
-                upcast: function (el) {
+                upcast: function (el, data) {
                     // Accept only section with configured classes
-                    if (el.name !== 'section' || !intersect(cfg, el.classes)) {
+                    var type;
+
+                    if (el.name !== 'section' || !(type = one(el, cfg))) {
                         return false;
                     }
 
@@ -60,33 +76,31 @@
                         return new CKEDITOR.htmlParser.text('');
                     }
 
+                    var children = el.children;
+                    el.children = [];
+                    data.type = type;
+
                     // Title
-                    if (el.children[0].name !== 'h2') {
-                        el.add(new CKEDITOR.htmlParser.element('h2'), 0);
-                    }
+                    var title = children[0].name === 'h2' ? children.shift() : new CKEDITOR.htmlParser.element('h2');
+                    el.add(title, 0);
 
                     // Media
                     var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
                     el.add(media, 1);
 
-                    if (el.children.length > 2 && isMedia(el.children[2])) {
-                        media.add(el.children[2]);
+                    if (children.length > 0 && !!isMedia(children[0])) {
+                        media.add(children.shift());
                     }
 
                     // Content
-                    if (el.children.length < 3 || !isContent(el.children[2])) {
+                    if (children.length > 0 && isContent(children[0])) {
+                        el.add(children.shift(), 2);
+                    } else {
                         var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
-                        el.add(content, 2);
-                        el.children.slice(3).forEach(function (item) {
-                            if (!item.isEmpty && !item.getHtml().trim()) {
-                                item.remove();
-                            } else {
+                        children.forEach(function (item) {
+                            if (item.isEmpty || item.getHtml().trim()) {
                                 content.add(item);
                             }
-                        });
-                    } else {
-                        el.children.slice(3).forEach(function (item) {
-                            item.remove();
                         });
                     }
 
@@ -107,9 +121,9 @@
 
                     // Media
                     el.children[1].setHtml(this.editables.media.getData());
-                    var media = el.children[1].getFirst();
+                    var media = el.children[1].getFirst('figure');
 
-                    if (isMedia(media)) {
+                    if (!!isMedia(media)) {
                         el.children[1].replaceWith(media);
                     } else {
                         el.children[1].remove();
