@@ -1,14 +1,6 @@
 'use strict';
 
 (function (CKEDITOR) {
-    /**
-     * Indicates if given arrays intersect
-     *
-     * @param {Array} haystack
-     * @param {Array} needle
-     *
-     * @return {boolean}
-     */
     function intersect(haystack, needle) {
         var filter = function (item) {
             return haystack.indexOf(item) >= 0;
@@ -17,24 +9,10 @@
         return Array.isArray(haystack) && Array.isArray(needle) && needle.filter(filter).length > 0;
     }
 
-    /**
-     * Indicates if given element is a media element
-     *
-     * @param {CKEDITOR.htmlParser.element} el
-     *
-     * @return {boolean}
-     */
     function isMedia(el) {
         return el.name === 'figure' && intersect(el.attributes.class, ['audio', 'iframe', 'image', 'video']);
     }
 
-    /**
-     * Indicates if given element is a content element
-     *
-     * @param {CKEDITOR.htmlParser.element} el
-     *
-     * @return {boolean}
-     */
     function isContent(el) {
         return el.name === 'div' && el.attributes.class === 'content';
     }
