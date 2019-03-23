@@ -102,8 +102,13 @@
                     return el.children.length > 0 ? el : new CKEDITOR.htmlParser.text('');
                 },
                 data: function () {
+                    var el = this.element;
+
                     if (this.data.type) {
-                        this.element.setAttribute('class', this.data.type);
+                        cfg.forEach(function (item) {
+                            el.removeClass(item);
+                        });
+                        el.addClass(this.data.type);
                     }
                 }
             });
