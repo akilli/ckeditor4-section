@@ -1,12 +1,42 @@
 'use strict';
 
 (function (CKEDITOR) {
+    /**
+     * Indicates if given arrays intersect
+     *
+     * @param {Array} haystack
+     * @param {Array} needle
+     *
+     * @return {boolean}
+     */
     function intersect(haystack, needle) {
         var filter = function (item) {
             return haystack.indexOf(item) >= 0;
         };
 
         return Array.isArray(haystack) && Array.isArray(needle) && needle.filter(filter).length > 0;
+    }
+
+    /**
+     * Indicates if given element is a media element
+     *
+     * @param {CKEDITOR.htmlParser.element} el
+     *
+     * @return {boolean}
+     */
+    function isMedia(el) {
+        return el.name === 'figure' && intersect(el.attributes.class, ['audio', 'iframe', 'image', 'video']);
+    }
+
+    /**
+     * Indicates if given element is a content element
+     *
+     * @param {CKEDITOR.htmlParser.element} el
+     *
+     * @return {boolean}
+     */
+    function isContent(el) {
+        return el.name === 'div' && el.attributes.class === 'content';
     }
 
     CKEDITOR.plugins.add('section', {
@@ -42,28 +72,44 @@
                 allowedContent: 'section(*); h2; div(!media); div(!content)',
                 requiredContent: 'section; h2; div(media); div(content)',
                 upcast: function (el) {
+                    // Accept only section with configured classes
                     if (el.name !== 'section' || !intersect(cfg, el.classes)) {
                         return false;
                     }
 
-                    var title = el.getFirst('h2');
-                    var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
-                    var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
+                    // Remove empty sections
+                    if (el.children.length <= 0) {
+                        return new CKEDITOR.htmlParser.text('');
+                    }
 
-                    if (!!title && title.children.length > 0 && title.children[0].type === CKEDITOR.NODE_ELEMENT) {
-                        title.setHtml(title.children[0].getHtml());
-                    } else if (!!title && title.children.length > 0 && title.children[0].type === CKEDITOR.NODE_TEXT) {
-                        title.setHtml(title.children[0].value);
-                    } else if (!title) {
+                    // Title
+                    if (el.children[0].name !== 'h2') {
                         el.add(new CKEDITOR.htmlParser.element('h2'), 0);
                     }
 
+                    // Media
+                    var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
                     el.add(media, 1);
-                    el.add(content, 2);
 
-                    if (el.children.length > 3) {
-                        content.children = el.children.slice(3);
-                        el.children = el.children.slice(0, 3);
+                    if (el.children.length > 2 && isMedia(el.children[2])) {
+                        media.add(el.children[2]);
+                    }
+
+                    // Content
+                    if (el.children.length < 3 || !isContent(el.children[2])) {
+                        var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
+                        el.add(content, 2);
+                        el.children.slice(3).forEach(function (item) {
+                            if (!item.isEmpty && !item.getHtml().trim()) {
+                                item.remove();
+                            } else {
+                                content.add(item);
+                            }
+                        });
+                    } else {
+                        el.children.slice(3).forEach(function (item) {
+                            item.remove();
+                        });
                     }
 
                     return true;
@@ -76,11 +122,10 @@
                     // Content
                     el.children[2].setHtml(this.editables.content.getData());
                     el.children[2].children.forEach(function (item) {
-                        if (item.isEmpty || item.getHtml().trim()) {
-                            el.add(item);
+                        if (!item.isEmpty && !item.getHtml().trim()) {
+                            item.remove();
                         }
                     });
-                    el.children[2].remove();
 
                     // Media
                     el.children[1].setHtml(this.editables.media.getData());
