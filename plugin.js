@@ -10,11 +10,11 @@
     }
 
     function isMedia(el) {
-        return el.name === 'figure' && intersect(el.attributes.class, ['audio', 'iframe', 'image', 'video']);
+        return !!el && el.name === 'figure' && intersect(el.attributes.class, ['audio', 'iframe', 'image', 'video']);
     }
 
     function isContent(el) {
-        return el.name === 'div' && el.attributes.class === 'content';
+        return !!el && el.name === 'div' && el.attributes.class === 'content';
     }
 
     CKEDITOR.plugins.add('section', {
@@ -107,9 +107,9 @@
 
                     // Media
                     el.children[1].setHtml(this.editables.media.getData());
-                    var media = el.children[1].getFirst('figure');
+                    var media = el.children[1].getFirst();
 
-                    if (media) {
+                    if (isMedia(media)) {
                         el.children[1].replaceWith(media);
                     } else {
                         el.children[1].remove();
