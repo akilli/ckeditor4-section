@@ -17,9 +17,9 @@
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
-            var cfg = editor.config.section ? Object.getOwnPropertyNames(editor.config.section) : [];
+            var classes = editor.config.section ? Object.getOwnPropertyNames(editor.config.section) : [];
 
-            if (cfg.length <= 0) {
+            if (classes.length <= 0) {
                 return;
             }
 
@@ -33,24 +33,40 @@
                 editables: {
                     title: {
                         selector: 'h2',
-                        allowedContent: 'a[!href]'
+                        allowedContent: {
+                            a: {
+                                attributes: {href: true},
+                                requiredAttributes: {href: true}
+                            }
+                        }
                     },
                     media: {
                         selector: '.media',
-                        allowedContent: 'figure(audio, iframe, image, video); a[!href]; audio[!src, controls]; iframe[!src, width, height, allowfullscreen]; img[!src, width, height, alt]; video[!src, width, height, controls]; figcaption',
-                        requiredContent: 'figure'
+                        allowedContent: {
+                            figure: {
+                                classes: {audio: true, iframe: true, image: true, video: true}
+                            }
+                        }
                     },
                     content: {
                         selector: '.content'
                     }
                 },
-                allowedContent: 'section(*); h2; div(!media); div(!content)',
-                requiredContent: 'section; h2; div(media); div(content)',
+                allowedContent: {
+                    div: {
+                        classes: {content: true, media: true}
+                    },
+                    h2: true,
+                    section: {
+                        classes: classes.map(function () {return true;})
+                    }
+                },
+                requiredContent: 'section',
                 upcast: function (el, data) {
-                    // Accept only section with configured classes
                     var type;
 
-                    if (el.name !== 'section' || !(type = one(el, cfg))) {
+                    // Accept only sections with configured classes
+                    if (el.name !== 'section' || !(type = one(el, classes))) {
                         return false;
                     }
 
@@ -125,7 +141,7 @@
                     var el = this.element;
 
                     if (this.data.type) {
-                        cfg.forEach(function (item) {
+                        classes.forEach(function (item) {
                             el.removeClass(item);
                         });
                         el.addClass(this.data.type);
