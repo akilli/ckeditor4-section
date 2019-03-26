@@ -72,7 +72,10 @@
 
                     // Remove empty sections
                     if (el.children.length <= 0) {
-                        return new CKEDITOR.htmlParser.text('');
+                        var text = new CKEDITOR.htmlParser.text('');
+                        el.replaceWith(text);
+
+                        return text;
                     }
 
                     var children = el.children;
