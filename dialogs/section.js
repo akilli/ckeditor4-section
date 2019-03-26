@@ -3,21 +3,6 @@
 (function (CKEDITOR) {
     CKEDITOR.dialog.add('section', function (editor) {
         var lang = editor.lang.section;
-        var common = editor.lang.common;
-        var cfg = editor.config.section;
-        var type = [[common.notSet, '']].concat(Object.getOwnPropertyNames(cfg).map(function (item) {
-            return [cfg[item], item];
-        }).sort(function (a, b) {
-            if (a[0] < b[0]) {
-                return -1;
-            }
-
-            if (a[0] > b[0]) {
-                return 1;
-            }
-
-            return 0;
-        }));
 
         return {
             title: lang.title,
@@ -33,7 +18,6 @@
                             id: 'type',
                             type: 'select',
                             label: lang.type,
-                            items: type,
                             setup: function (widget) {
                                 this.setValue(widget.data.type || '');
                             },

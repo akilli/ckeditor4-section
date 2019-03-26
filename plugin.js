@@ -58,7 +58,9 @@
                     },
                     h2: true,
                     section: {
-                        classes: classes.map(function () {return true;})
+                        classes: classes.map(function () {
+                            return true;
+                        })
                     }
                 },
                 requiredContent: 'section',
@@ -158,6 +160,34 @@
             CKEDITOR.dialog.add('section', this.path + 'dialogs/section.js');
         }
     });
+
+    /**
+     * Dialog definition
+     */
+    CKEDITOR.on('dialogDefinition', function (ev) {
+        if (ev.data.name !== 'section') {
+            return;
+        }
+
+        /**
+         * Type select
+         */
+        var cfg = ev.editor.config.section;
+        var type = ev.data.definition.contents[0].elements[0];
+        type.items = [[ev.editor.lang.common.notSet, '']].concat(Object.getOwnPropertyNames(cfg).map(function (item) {
+            return [cfg[item], item];
+        }).sort(function (a, b) {
+            if (a[0] < b[0]) {
+                return -1;
+            }
+
+            if (a[0] > b[0]) {
+                return 1;
+            }
+
+            return 0;
+        }));
+    }, null, null, 1);
 
     /**
      * Returns found class
