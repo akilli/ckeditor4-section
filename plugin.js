@@ -92,7 +92,7 @@
                     var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
                     el.add(media, 1);
 
-                    if (children.length > 0 && !!isMedia(children[0])) {
+                    if (children.length > 0 && isMedia(children[0])) {
                         media.add(children.shift());
                     }
 
@@ -127,7 +127,7 @@
                     el.children[1].setHtml(this.editables.media.getData());
                     var media = el.children[1].getFirst('figure');
 
-                    if (!!isMedia(media)) {
+                    if (isMedia(media)) {
                         el.children[1].replaceWith(media);
                     } else {
                         el.children[1].remove();
@@ -222,10 +222,10 @@
      *
      * @param {CKEDITOR.htmlParser.element} el
      *
-     * @return {string|null}
+     * @return {boolean}
      */
     function isMedia(el) {
-        return el && el.name === 'figure' ? one(el, defaults.media) : null;
+        return el && el.name === 'figure' && one(el, defaults.media);
     }
 
     /**
