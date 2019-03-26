@@ -18,10 +18,15 @@
         lang: 'de,en',
         init: function (editor) {
             var classes = editor.config.section ? Object.getOwnPropertyNames(editor.config.section) : [];
+            var allowedClasses = {};
 
             if (classes.length <= 0) {
                 return;
             }
+
+            classes.forEach(function (item) {
+                allowedClasses[item] = true;
+            });
 
             /**
              * Widget
@@ -43,8 +48,29 @@
                     media: {
                         selector: '.media',
                         allowedContent: {
+                            a: {
+                                attributes: {href: true},
+                                requiredAttributes: {href: true}
+                            },
+                            audio: {
+                                attributes: {controls: true, src: true},
+                                requiredAttributes: {controls: true, src: true}
+                            },
+                            figcaption: true,
                             figure: {
                                 classes: {audio: true, iframe: true, image: true, video: true}
+                            },
+                            iframe: {
+                                attributes: {allowfullscreen: true, height: true, src: true, width: true},
+                                requiredAttributes: {src: true}
+                            },
+                            img: {
+                                attributes: {alt: true, height: true, src: true, width: true},
+                                requiredAttributes: {src: true}
+                            },
+                            video: {
+                                attributes: {controls: true, height: true, src: true, width: true},
+                                requiredAttributes: {src: true}
                             }
                         }
                     },
@@ -58,9 +84,7 @@
                     },
                     h2: true,
                     section: {
-                        classes: classes.map(function () {
-                            return true;
-                        })
+                        classes: allowedClasses
                     }
                 },
                 requiredContent: 'section',
@@ -213,6 +237,14 @@
                 result = haystack[i];
             }
         }
+
+        var call = function (item) {
+            return el.hasClass(item);
+        };
+        console.log(el);
+        console.log(haystack);
+        console.log(result);
+        console.log(haystack.find(call) || null);
 
         return result;
     }
