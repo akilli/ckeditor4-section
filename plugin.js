@@ -75,7 +75,20 @@
                         }
                     },
                     content: {
-                        selector: '.content'
+                        selector: '.content',
+                        allowedContent: {
+                            a: {
+                                attributes: {href: true},
+                                requiredAttributes: {href: true}
+                            },
+                            br: true,
+                            em: true,
+                            p: true,
+                            li: true,
+                            ol: true,
+                            strong: true,
+                            ul: true
+                        }
                     }
                 },
                 allowedContent: {
