@@ -236,15 +236,12 @@
      * @return {string|null}
      */
     function one(el, haystack) {
-        if (!el || !Array.isArray(haystack)) {
-            return null;
-        }
-
         var call = function (item) {
             return el.hasClass(item);
         };
+        var result;
 
-        return haystack.find(call) || null;
+        return el && Array.isArray(haystack) && (result = haystack.find(call)) ? result : null;
     }
 
     /**
