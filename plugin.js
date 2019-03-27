@@ -164,6 +164,10 @@
                         }
                     });
 
+                    if (el.children[2].children.length <= 0) {
+                        el.children[2].remove();
+                    }
+
                     // Media
                     el.children[1].setHtml(this.editables.media.getData());
                     var media = el.children[1].getFirst('figure');
