@@ -101,6 +101,9 @@
                     }
                 },
                 requiredContent: 'section',
+                defaults: {
+                    type: ''
+                },
                 upcast: function (el, data) {
                     var type;
 

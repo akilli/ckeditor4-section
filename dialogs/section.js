@@ -19,7 +19,7 @@
                             type: 'select',
                             label: lang.type,
                             setup: function (widget) {
-                                this.setValue(widget.data.type || '');
+                                this.setValue(widget.data.type);
                             },
                             commit: function (widget) {
                                 widget.setData('type', this.getValue());
