@@ -240,27 +240,11 @@
             return null;
         }
 
-        var result = null;
-
-        for (var i = 0; i < haystack.length; i++) {
-            if (el.hasClass(haystack[i])) {
-                if (result) {
-                    return null;
-                }
-
-                result = haystack[i];
-            }
-        }
-
         var call = function (item) {
             return el.hasClass(item);
         };
-        console.log(el);
-        console.log(haystack);
-        console.log(result);
-        console.log(haystack.find(call) || null);
 
-        return result;
+        return haystack.find(call) || null;
     }
 
     /**
