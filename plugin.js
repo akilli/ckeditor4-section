@@ -138,6 +138,7 @@
                         el.add(children.shift(), 2);
                     } else {
                         var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
+                        el.add(content, 2);
                         children.forEach(function (item) {
                             if (item.isEmpty || item.getHtml().trim()) {
                                 content.add(item);
