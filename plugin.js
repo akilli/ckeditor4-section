@@ -58,7 +58,7 @@
                             },
                             figcaption: true,
                             figure: {
-                                classes: {audio: true, iframe: true, image: true, video: true}
+                                classes: {audio: true, iframe: true, image: true, left: true, right: true, video: true}
                             },
                             iframe: {
                                 attributes: {allowfullscreen: true, height: true, src: true, width: true},
