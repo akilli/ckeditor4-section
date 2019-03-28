@@ -2,13 +2,6 @@
 
 (function (CKEDITOR) {
     /**
-     * Defaults
-     */
-    var defaults = {
-        media: ['audio', 'iframe', 'image', 'video']
-    };
-
-    /**
      * Plugin
      */
     CKEDITOR.plugins.add('section', {
@@ -108,7 +101,7 @@
                     var type;
 
                     // Accept only sections with configured classes
-                    if (el.name !== 'section' || !(type = one(el, classes))) {
+                    if (el.name !== 'section' || !(type = CKEDITOR.api.parser.hasClass(el, classes))) {
                         return false;
                     }
 
@@ -132,12 +125,12 @@
                     var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
                     el.add(media, 1);
 
-                    if (children.length > 0 && isMedia(children[0])) {
+                    if (children.length > 0 && !!CKEDITOR.api.parser.isMediaFigure(children[0])) {
                         media.add(children.shift());
                     }
 
                     // Content
-                    if (children.length > 0 && isContent(children[0])) {
+                    if (children.length > 0 && children[0].name === 'div' && children[0].hasClass('content')) {
                         el.add(children.shift(), 2);
                     } else {
                         var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
@@ -172,7 +165,7 @@
                     el.children[1].setHtml(this.editables.media.getData());
                     var media = el.children[1].getFirst('figure');
 
-                    if (isMedia(media)) {
+                    if (!!CKEDITOR.api.parser.isMediaFigure(media)) {
                         el.children[1].replaceWith(media);
                     } else {
                         el.children[1].remove();
@@ -233,43 +226,4 @@
             return 0;
         }));
     }, null, null, 1);
-
-    /**
-     * Returns found class
-     *
-     * @param {CKEDITOR.htmlParser.element} el
-     * @param {string[]} haystack
-     *
-     * @return {string|null}
-     */
-    function one(el, haystack) {
-        var call = function (item) {
-            return el.hasClass(item);
-        };
-        var result;
-
-        return el && Array.isArray(haystack) && (result = haystack.find(call)) ? result : null;
-    }
-
-    /**
-     * Returns the media type if given element is a media element
-     *
-     * @param {CKEDITOR.htmlParser.element} el
-     *
-     * @return {boolean}
-     */
-    function isMedia(el) {
-        return el && el.name === 'figure' && one(el, defaults.media);
-    }
-
-    /**
-     * Indicates if given element is the content element
-     *
-     * @param {CKEDITOR.htmlParser.element} el
-     *
-     * @return {boolean}
-     */
-    function isContent(el) {
-        return !!el && el.name === 'div' && el.attributes.class === 'content';
-    }
 })(CKEDITOR);
