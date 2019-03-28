@@ -125,7 +125,7 @@
                     var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
                     el.add(media, 1);
 
-                    if (children.length > 0 && !!CKEDITOR.api.parser.isMediaFigure(children[0])) {
+                    if (children.length > 0 && CKEDITOR.api.parser.isMediaFigure(children[0])) {
                         media.add(children.shift());
                     }
 
@@ -136,9 +136,7 @@
                         var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
                         el.add(content, 2);
                         children.forEach(function (item) {
-                            if (item.isEmpty || item.getHtml().trim()) {
-                                content.add(item);
-                            }
+                            CKEDITOR.api.parser.add(item, content);
                         });
                     }
 
@@ -151,11 +149,7 @@
 
                     // Content
                     el.children[2].setHtml(this.editables.content.getData());
-                    el.children[2].children.forEach(function (item) {
-                        if (!item.isEmpty && !item.getHtml().trim()) {
-                            item.remove();
-                        }
-                    });
+                    el.children[2].children.forEach(CKEDITOR.api.parser.remove);
 
                     if (el.children[2].children.length <= 0) {
                         el.children[2].remove();
@@ -165,7 +159,7 @@
                     el.children[1].setHtml(this.editables.media.getData());
                     var media = el.children[1].getFirst('figure');
 
-                    if (!!CKEDITOR.api.parser.isMediaFigure(media)) {
+                    if (CKEDITOR.api.parser.isMediaFigure(media)) {
                         el.children[1].replaceWith(media);
                     } else {
                         el.children[1].remove();
