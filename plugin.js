@@ -17,7 +17,7 @@
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
-            var classes = editor.config.section ? Object.getOwnPropertyNames(editor.config.section) : [];
+            var classes = !!editor.config.section ? Object.getOwnPropertyNames(editor.config.section) : [];
             var allowedClasses = {};
 
             if (classes.length <= 0) {
