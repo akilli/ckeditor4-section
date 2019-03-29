@@ -125,7 +125,7 @@
                     var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
                     el.add(media, 1);
 
-                    if (children.length > 0 && CKEDITOR.api.parser.isMediaFigure(children[0])) {
+                    if (children.length > 0 && !!CKEDITOR.api.parser.isMediaFigure(children[0])) {
                         media.add(children.shift());
                     }
 
@@ -159,7 +159,7 @@
                     el.children[1].setHtml(this.editables.media.getData());
                     var media = el.children[1].getFirst('figure');
 
-                    if (CKEDITOR.api.parser.isMediaFigure(media)) {
+                    if (!!CKEDITOR.api.parser.isMediaFigure(media)) {
                         el.children[1].replaceWith(media);
                     } else {
                         el.children[1].remove();
