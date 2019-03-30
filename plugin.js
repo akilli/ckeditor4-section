@@ -21,11 +21,11 @@
                 editor.config.section = defaults.config;
             }
 
-            var classes = Object.getOwnPropertyNames(editor.config.section);
-            var allowedClasses = {};
+            var types = Object.getOwnPropertyNames(editor.config.section);
+            var allowed = {};
 
-            classes.forEach(function (item) {
-                allowedClasses[item] = true;
+            types.forEach(function (item) {
+                allowed[item] = true;
             });
 
             /**
@@ -33,8 +33,8 @@
              */
             editor.widgets.add('section', {
                 button: editor.lang.section.title,
-                dialog: 'section',
-                template: '<section class=""><h2></h2><div class="media"></div><div class="content"></div></section>',
+                dialog: types.length > 1 ? 'section' : null,
+                template: '<section class="' + (types.length > 1 ? 'section' : '') + '"><h2></h2><div class="media"></div><div class="content"></div></section>',
                 editables: {
                     title: {
                         selector: 'h2',
@@ -97,7 +97,7 @@
                     },
                     h2: true,
                     section: {
-                        classes: allowedClasses
+                        classes: allowed
                     }
                 },
                 requiredContent: 'section',
@@ -108,7 +108,7 @@
                     var type;
 
                     // Accept only sections with configured classes
-                    if (el.name !== 'section' || !(type = CKEDITOR.api.parser.hasClass(el, classes))) {
+                    if (el.name !== 'section' || !(type = CKEDITOR.api.parser.hasClass(el, types))) {
                         return false;
                     }
 
@@ -183,9 +183,10 @@
                 },
                 data: function () {
                     var el = this.element;
+                    this.data.type = types.length === 1 ? types[0] : this.data.type;
 
                     if (this.data.type) {
-                        classes.forEach(function (item) {
+                        types.forEach(function (item) {
                             el.removeClass(item);
                         });
                         el.addClass(this.data.type);
@@ -196,7 +197,9 @@
             /**
              * Dialog
              */
-            CKEDITOR.dialog.add('section', this.path + 'dialogs/section.js');
+            if (types.length > 1) {
+                CKEDITOR.dialog.add('section', this.path + 'dialogs/section.js');
+            }
         }
     });
 
