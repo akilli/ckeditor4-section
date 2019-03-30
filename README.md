@@ -1,8 +1,16 @@
 # Section Widget
 
-This widget offers the possibility to add a configurable amount of types of simple content blocks into the editor.
+This widget offers the possibility to add a configurable amount of *similar structured* sections into the editor and make them distinguishable by custom CSS classes, so you can apply different styles on them.
 
-Each type will have its custom CSS class and three optional editables: heading, media element and content.
+*Similar structured* is not quite accurate. It just means, that all section types will have three editables: heading, media element and content. But all of them are optional. 
+
+If all editables are filled with content, the resulting HTML will be
+
+    <section class="...">
+        <h2>...</h2>
+        <figure class="...">...</figure>
+        <div class="content">...</div>
+    </section>  
 
 The configuration expects an object with one or several CSS classes as the properties and the corresponding labels visible in the section dialog as the values, p.e.
 
