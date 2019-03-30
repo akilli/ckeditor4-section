@@ -157,6 +157,7 @@
                     // Content
                     el.children[2].setHtml(this.editables.content.getData());
                     el.children[2].children.forEach(CKEDITOR.api.parser.remove);
+                    this.editables.content.setHtml(el.children[2].getHtml());
 
                     if (el.children[2].children.length <= 0) {
                         el.children[2].remove();
