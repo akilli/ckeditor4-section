@@ -2,13 +2,6 @@
 
 (function (CKEDITOR) {
     /**
-     * Defaults
-     */
-    var defaults = {
-        config: {block: 'Block'}
-    };
-
-    /**
      * Plugin
      */
     CKEDITOR.plugins.add('section', {
@@ -17,15 +10,11 @@
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
-            if (!editor.config.section) {
-                editor.config.section = defaults.config;
-            }
+            var css = Object.getOwnPropertyNames(editor.config.section || {});
+            var classes = {};
 
-            var types = Object.getOwnPropertyNames(editor.config.section);
-            var allowed = {};
-
-            types.forEach(function (item) {
-                allowed[item] = true;
+            css.forEach(function (item) {
+                classes[item] = true;
             });
 
             /**
@@ -33,8 +22,8 @@
              */
             editor.widgets.add('section', {
                 button: editor.lang.section.title,
-                dialog: types.length > 1 ? 'section' : null,
-                template: '<section class="block"><h2></h2><div class="media"></div><div class="content"></div></section>',
+                dialog: css.length > 0 ? 'section' : null,
+                template: '<section><h2></h2><div class="media"></div><div class="content"></div></section>',
                 editables: {
                     title: {
                         selector: 'h2',
@@ -97,18 +86,15 @@
                     },
                     h2: true,
                     section: {
-                        classes: allowed
+                        classes: classes
                     }
                 },
                 requiredContent: 'section',
                 defaults: {
-                    type: ''
+                    css: ''
                 },
                 upcast: function (el, data) {
-                    var type;
-
-                    // Accept only sections with configured classes
-                    if (el.name !== 'section' || !(type = CKEDITOR.api.parser.hasClass(el, types))) {
+                    if (el.name !== 'section') {
                         return false;
                     }
 
@@ -122,7 +108,7 @@
 
                     var children = el.children;
                     el.children = [];
-                    data.type = type;
+                    data.css = CKEDITOR.api.parser.hasClass(el, css) || '';
 
                     // Title
                     var title = children[0].name === 'h2' ? children.shift() : new CKEDITOR.htmlParser.element('h2');
@@ -150,10 +136,6 @@
                     return true;
                 },
                 downcast: function (el) {
-                    if (!this.data.type) {
-                        return new CKEDITOR.htmlParser.text('');
-                    }
-
                     // Content
                     el.children[2].setHtml(this.editables.content.getData());
                     el.children[2].children.forEach(CKEDITOR.api.parser.remove);
@@ -184,13 +166,13 @@
                 },
                 data: function () {
                     var el = this.element;
-                    this.data.type = types.length === 1 ? types[0] : this.data.type;
 
-                    if (this.data.type) {
-                        types.forEach(function (item) {
-                            el.removeClass(item);
-                        });
-                        el.addClass(this.data.type);
+                    css.forEach(function (item) {
+                        el.removeClass(item);
+                    });
+
+                    if (!!this.data.css) {
+                        el.addClass(this.data.css);
                     }
                 }
             });
@@ -198,7 +180,7 @@
             /**
              * Dialog
              */
-            if (types.length > 1) {
+            if (css.length > 0) {
                 CKEDITOR.dialog.add('section', this.path + 'dialogs/section.js');
             }
 
@@ -220,9 +202,9 @@
         /**
          * Type select
          */
-        var cfg = ev.editor.config.section;
-        var type = ev.data.definition.contents[0].elements[0];
-        type.items = [[ev.editor.lang.common.notSet, '']].concat(Object.getOwnPropertyNames(cfg).map(function (item) {
+        var cfg = ev.editor.config.section || {};
+        var css = ev.data.definition.contents[0].elements[0];
+        css.items = [[ev.editor.lang.common.notSet, '']].concat(Object.getOwnPropertyNames(cfg).map(function (item) {
             return [cfg[item], item];
         }).sort(function (a, b) {
             if (a[0] < b[0]) {

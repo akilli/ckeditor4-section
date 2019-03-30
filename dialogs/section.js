@@ -15,16 +15,15 @@
                     label: lang.info,
                     elements: [
                         {
-                            id: 'type',
+                            id: 'css',
                             type: 'select',
-                            label: lang.type,
+                            label: lang.css,
                             setup: function (widget) {
-                                this.setValue(widget.data.type);
+                                this.setValue(widget.data.css);
                             },
                             commit: function (widget) {
-                                widget.setData('type', this.getValue());
-                            },
-                            validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired)
+                                widget.setData('css', this.getValue());
+                            }
                         }
                     ]
                 }

@@ -2,8 +2,7 @@
 
 (function (CKEDITOR) {
     CKEDITOR.plugins.setLang('section', 'en', {
-        title: 'Section',
-        type: 'Type',
-        validateRequired: 'This field is required'
+        css: 'CSS class',
+        title: 'Section'
     });
 })(CKEDITOR);
