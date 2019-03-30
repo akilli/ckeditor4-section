@@ -2,7 +2,7 @@
 
 This widget offers the possibility to add a configurable amount of *similar structured* sections into the editor and make them distinguishable by custom CSS classes, so you can apply different styles on them.
 
-*Similar structured* is not quite accurate. It just means, that all section types will have three editables: heading, media element and content. But all of them are optional. 
+*Similar structured* is not quite accurate. It just means, that all configured sections will have three editables: heading, media element and content. But all of them are optional. 
 
 If all editables are filled with content, the resulting HTML will be
 
