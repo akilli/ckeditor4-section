@@ -10,7 +10,7 @@ All sections will have three editables: heading, media element and content. But 
         <div class="content">...</div>
     </section>  
 
-The configuration expects an object with one or several CSS classes as the properties and the corresponding labels visible in the section dialog as the values, p.e.
+The optional configuration expects an object with one or several CSS classes as the properties and the corresponding labels visible in the section dialog as the values, p.e.
 
     config.section: {
         'block-content': 'Content Block',
