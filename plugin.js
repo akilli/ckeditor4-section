@@ -34,7 +34,7 @@
             editor.widgets.add('section', {
                 button: editor.lang.section.title,
                 dialog: types.length > 1 ? 'section' : null,
-                template: '<section class="' + (types.length > 1 ? 'section' : '') + '"><h2></h2><div class="media"></div><div class="content"></div></section>',
+                template: '<section class="block"><h2></h2><div class="media"></div><div class="content"></div></section>',
                 editables: {
                     title: {
                         selector: 'h2',
