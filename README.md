@@ -1,6 +1,6 @@
 # Section Widget
 
-This widget offers the possibility to add a configurable amount of *similar structured* types of content blocks into the editor.
+This widget offers the possibility to add a configurable amount of types of simple content blocks into the editor.
 
 Each type will have its custom CSS class and three optional editables: heading, media element and content.
 
