@@ -2,6 +2,13 @@
 
 (function (CKEDITOR) {
     /**
+     * Defaults
+     */
+    var defaults = {
+        config: {block: 'Block'}
+    };
+
+    /**
      * Plugin
      */
     CKEDITOR.plugins.add('section', {
@@ -10,12 +17,12 @@
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
-            var classes = !!editor.config.section ? Object.getOwnPropertyNames(editor.config.section) : [];
-            var allowedClasses = {};
-
-            if (classes.length <= 0) {
-                return;
+            if (!editor.config.section) {
+                editor.config.section = defaults.config;
             }
+
+            var classes = Object.getOwnPropertyNames(editor.config.section);
+            var allowedClasses = {};
 
             classes.forEach(function (item) {
                 allowedClasses[item] = true;

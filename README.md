@@ -14,9 +14,15 @@ If all editables are filled with content, the resulting HTML will be
 
 The configuration expects an object with one or several CSS classes as the properties and the corresponding labels visible in the section dialog as the values, p.e.
 
-    config.section: {'block-content': 'Inhaltsblock', 'block-info': 'Infoblock'};
+    config.section: {
+        'block-content': 'Content Block', // CSS class 'block-content' + label 'Content Block'
+        'block-info': 'Info Block',
+        ...
+    };
 
-You have to configure at least one type otherwise this widget will not initialize itself. 
+If you do not configure custom types, the configuration will fall back to
+
+    config.section: {'block': 'Block'};
 
 ## Demo
 
