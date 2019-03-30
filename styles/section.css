@@ -1,0 +1,58 @@
+section[data-widget=section] {
+    line-height: 1.5rem;
+    padding: 0.75rem 0.75rem 0.75rem 13.5rem;
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.5rem;
+}
+
+section[data-widget=section] > h2 {
+    margin-bottom: 0.75rem;
+}
+
+section[data-widget=section] > div.media,
+section[data-widget=section] > figure {
+    position: relative;
+    width: 12rem;
+    height: 12rem;
+    float: left;
+    margin: -2.25rem 0 0 -12.75rem;
+    object-fit: cover;
+    object-position: center;
+}
+
+section[data-widget=section] > div.media figure {
+    float: none;
+    margin: 0;
+    background: #fff;
+}
+
+section[data-widget=section] > div.media audio,
+section[data-widget=section] > div.media iframe,
+section[data-widget=section] > div.media img,
+section[data-widget=section] > div.media video,
+section[data-widget=section] > figure audio,
+section[data-widget=section] > figure iframe,
+section[data-widget=section] > figure img,
+section[data-widget=section] > figure video {
+    max-height: 10.5rem;
+}
+
+section[data-widget=section] > div.content {
+    min-height: 9.75rem;
+}
+
+section[data-widget=section] .cke_widget_editable {
+    background: #eee;
+    outline: none !important;
+}
+
+section[data-widget=section]::before {
+    display: table;
+    content: " ";
+}
+
+section[data-widget=section]::after {
+    display: table;
+    content: " ";
+    clear: both;
+}

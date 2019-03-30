@@ -201,6 +201,11 @@
             if (types.length > 1) {
                 CKEDITOR.dialog.add('section', this.path + 'dialogs/section.js');
             }
+
+            /**
+             * Styles
+             */
+            editor.addContentsCss(this.path + 'styles/section.css');
         }
     });
 
