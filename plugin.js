@@ -98,20 +98,12 @@
                         return false;
                     }
 
-                    // Remove empty sections
-                    if (el.children.length <= 0) {
-                        var text = new CKEDITOR.htmlParser.text('');
-                        el.replaceWith(text);
-
-                        return text;
-                    }
-
                     var children = el.children;
                     el.children = [];
                     data.css = CKEDITOR.api.parser.hasClass(el, css) || '';
 
                     // Title
-                    var title = children[0].name === 'h2' ? children.shift() : new CKEDITOR.htmlParser.element('h2');
+                    var title = children.length > 0 && children[0].name === 'h2' ? children.shift() : new CKEDITOR.htmlParser.element('h2');
                     el.add(title, 0);
 
                     // Media
