@@ -3,6 +3,7 @@
 (function (CKEDITOR) {
     CKEDITOR.dialog.add('section', function (editor) {
         var lang = editor.lang.section;
+        var common = editor.lang.common;
 
         return {
             title: lang.title,
@@ -12,7 +13,7 @@
             contents: [
                 {
                     id: 'info',
-                    label: lang.info,
+                    label: common.generalTab,
                     elements: [
                         {
                             id: 'css',
