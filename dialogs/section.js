@@ -12,7 +12,7 @@
             minHeight: 100,
             contents: [
                 {
-                    id: 'info',
+                    id: 'general',
                     label: common.generalTab,
                     elements: [
                         {
