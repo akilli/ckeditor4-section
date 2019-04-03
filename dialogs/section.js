@@ -3,7 +3,6 @@
 (function (CKEDITOR) {
     CKEDITOR.dialog.add('section', function (editor) {
         var lang = editor.lang.section;
-        var common = editor.lang.common;
 
         return {
             title: lang.title,
@@ -12,8 +11,8 @@
             minHeight: 100,
             contents: [
                 {
-                    id: 'general',
-                    label: common.generalTab,
+                    id: 'info',
+                    label: lang.info,
                     elements: [
                         {
                             id: 'css',
