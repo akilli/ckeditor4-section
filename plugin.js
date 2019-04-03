@@ -93,6 +93,7 @@
                 defaults: {
                     css: ''
                 },
+                upcastPriority: 20,
                 upcast: function (el, data) {
                     if (el.name !== 'section') {
                         return false;
