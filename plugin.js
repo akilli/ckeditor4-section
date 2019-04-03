@@ -98,32 +98,28 @@
                         return false;
                     }
 
-                    var children = el.children;
-                    el.children = [];
                     data.css = CKEDITOR.api.parser.hasClass(el, css) || '';
 
                     // Title
-                    var title = children.length > 0 && children[0].name === 'h2' ? children.shift() : new CKEDITOR.htmlParser.element('h2');
-                    el.add(title, 0);
+                    if (el.children.length < 1 || el.children[0].name !== 'h2') {
+                        el.add(new CKEDITOR.htmlParser.element('h2'), 0);
+                    }
 
                     // Media
-                    var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
-                    el.add(media, 1);
-
-                    if (children.length > 0 && !!CKEDITOR.api.parser.isMediaFigure(children[0])) {
-                        media.add(children.shift());
+                    if (el.children.length < 2 || !CKEDITOR.api.parser.isMediaFigure(el.children[1])) {
+                        el.add(new CKEDITOR.htmlParser.element('div', {'class': 'media'}), 1);
+                    } else {
+                        el.children[1].wrapWith(new CKEDITOR.htmlParser.element('div', {'class': 'media'}));
                     }
 
                     // Content
-                    if (children.length > 0 && children[0].name === 'div' && children[0].hasClass('content')) {
-                        el.add(children.shift(), 2);
-                    } else {
+                    if (el.children.length < 3 || el.children[2].name !== 'div' || !el.children[2].hasClass('content')) {
                         var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
                         el.add(content, 2);
-                        children.forEach(function (item) {
-                            CKEDITOR.api.parser.add(item, content);
-                        });
+                        content.children = el.children.slice(3);
                     }
+
+                    el.children = el.children.slice(0, 3);
 
                     return true;
                 },
