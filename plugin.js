@@ -184,17 +184,16 @@
      * Dialog definition
      */
     CKEDITOR.on('dialogDefinition', function (ev) {
-        if (ev.data.name !== 'section') {
+        if (ev.data.name !== 'section' || typeof ev.editor.config.section !== 'object') {
             return;
         }
 
         /**
          * Type select
          */
-        var cfg = ev.editor.config.section || {};
         var css = ev.data.definition.contents[0].elements[0];
-        css.items = [[ev.editor.lang.common.notSet, '']].concat(Object.getOwnPropertyNames(cfg).map(function (item) {
-            return [cfg[item], item];
+        css.items = [[ev.editor.lang.common.notSet, '']].concat(Object.getOwnPropertyNames(ev.editor.config.section).map(function (item) {
+            return [ev.editor.config.section[item], item];
         }).sort(function (a, b) {
             if (a[0] < b[0]) {
                 return -1;
