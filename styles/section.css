@@ -20,7 +20,8 @@ section > h2 {
     margin-bottom: 0.75rem;
 }
 
-section > div.media {
+section > div.media,
+section > figure {
     position: relative;
     width: 12rem;
     height: 12.75rem;
@@ -39,7 +40,11 @@ section > div.media figure {
 section > div.media audio,
 section > div.media iframe,
 section > div.media img,
-section > div.media video {
+section > div.media video,
+section > figure audio,
+section > figure iframe,
+section > figure img,
+section > figure video {
     max-height: 10.5rem;
 }
 
