@@ -35,7 +35,7 @@
                         }
                     },
                     media: {
-                        selector: '.media',
+                        selector: 'div.media',
                         allowedContent: {
                             a: {
                                 attributes: {href: true},
@@ -64,7 +64,7 @@
                         }
                     },
                     content: {
-                        selector: '.content',
+                        selector: 'div.content',
                         allowedContent: {
                             a: {
                                 attributes: {href: true},
