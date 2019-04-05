@@ -37,11 +37,9 @@ section > div.media figure {
     background: #fff;
 }
 
-section > div.media audio,
 section > div.media iframe,
 section > div.media img,
 section > div.media video,
-section > figure audio,
 section > figure iframe,
 section > figure img,
 section > figure video {
