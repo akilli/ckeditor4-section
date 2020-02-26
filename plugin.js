@@ -13,7 +13,7 @@
         requires: 'api,dialog,widget',
         icons: 'section',
         hidpi: true,
-        lang: 'de,en',
+        lang: 'de,en,uk',
         init: function (editor) {
             var css = Object.getOwnPropertyNames(editor.config.section || {});
             var classes = {};
